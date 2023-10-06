@@ -1,26 +1,42 @@
 class Todo {
-  int id;
-  String title;
-  String value;
+  String task;
   bool completed;
 
   Todo({
-    required this.id,
-    required this.title,
-    required this.value,
+    required this.task,
     required this.completed,
   });
 
-  Map<String, dynamic> todoMap() => {
-    "id": id,
-    "title": title,
-    "value": value,
-    "completed": false
-  };
+  Map<String, dynamic> toMap() {
+    return {
+      "task": task,
+      "completed": completed,
+    };
+  }
 
-  List<Todo> todoList = [];
+  factory Todo.fromMap(Map map) {
+    return Todo(
+      task: map["task"],
+      completed: map["completed"],
+    );
+  }
 
-  addTodo(context, index) {
-    todoList[index]
+  final List<Todo> _todos = [];
+
+  void addAndStoreTodo(Todo todo) {
+    _todos.add(todo);
+  }
+
+  void removeTodo(List<Todo> todoList, int index) {
+    todoList.removeAt(index);
+  }
+
+  void onTaskComplete(bool? value, int index) {
+    _todos[index].completed = !_todos[index].completed;
+  }
+
+  @override
+  String toString() {
+    return 'Todo: $task isCompleted: $completed';
   }
 }
