@@ -23,7 +23,6 @@ class TodoTile extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: onDelete,
-            flex: 0,
             icon: Icons.delete,
             borderRadius: BorderRadius.circular(14),
             backgroundColor: Colors.red.shade500,

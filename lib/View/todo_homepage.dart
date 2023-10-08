@@ -46,59 +46,63 @@ class TodoHomePage extends StatelessWidget {
       todoProvider.todoList.removeAt(index);
     }
 
-    return Consumer<TodoProvider>(
-      builder: (context, value, child) => Scaffold(
-        appBar: AppBar(
-          title: Row(
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            const Icon(
+              Icons.checklist,
+              size: 30,
+            ),
+            const Expanded(
+              flex: 1,
+              child: Text(
+                'To-dos',
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            ),
+            CircleAvatar(
+              child: GestureDetector(
+                onTap: () => context.push('/sign-in'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: createNewTask,
+        label: IntrinsicWidth(
+          child: Row(
             children: [
-              const Expanded(
-                flex: 1,
-                child: Text(
-                  'To-dos',
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                ),
+              const Text("Add Task"),
+              const SizedBox(
+                width: 5,
               ),
-              CircleAvatar(
-                child: GestureDetector(
-                  onTap: () => context.push('/sign-in'),
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
+                child: const Icon(Icons.add),
+              )
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: createNewTask,
-          label: IntrinsicWidth(
-            child: Row(
-              children: [
-                const Text("Add Task"),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.add),
-                )
-              ],
-            ),
-          ),
-        ),
-        body: FutureBuilder(
+      ),
+      body: Consumer<TodoProvider>(
+        builder: (context, value, child) => FutureBuilder(
           future: FirebaseFirestore.instance
               .collection("Todos")
               .get()
               .then((snapshot) => snapshot.docs.forEach((element) {
-            if (kDebugMode) {
-              print(element.reference);
-            }
-          })),
+                    if (kDebugMode) {
+                      print(element.reference);
+                    }
+                  })),
           builder: (context, snapshot) {
             if (value.todoList.isEmpty) {
               return const Center(
